@@ -1242,6 +1242,8 @@ MonoBehaviour:
   TradeItemListPanel: {fileID: 224000011586416764}
   TradeItemPrefab: {fileID: 1000012557555258, guid: da29396d89156184cac0956897e67691,
     type: 2}
+  TradeRequestPrefab: {fileID: 1000011402976320, guid: 9de6abecddb682a41ab901db434bdd30,
+    type: 2}
   AcceptButton: {fileID: 114000013484129864}
 --- !u!114 &114000013884086016
 MonoBehaviour:

@@ -136,7 +136,7 @@ GameObject:
   - 114: {fileID: 114000011190896098}
   - 114: {fileID: 114000014149192410}
   m_Layer: 5
-  m_Name: TradeRequest
+  m_Name: TradeRequestPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
