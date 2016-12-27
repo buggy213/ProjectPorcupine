@@ -22,6 +22,7 @@ public class DialogBoxTrade : DialogBox
     public Transform TradeItemListPanel;
 
     public GameObject TradeItemPrefab;
+    public GameObject TradeRequestPrefab;
 
     public Action TradeCompleted;
     public Action TradeCancelled;
@@ -90,14 +91,35 @@ public class DialogBoxTrade : DialogBox
     {
         if (trade.IsValid())
         {
-            trade = null;
             ClearInterface();
             if (TradeCompleted != null)
             {
                 TradeCompleted();
             }
         }
+    }
+    
+    public void FinalizeRequests()
+    {
+        for (int i = 0; i < TradeItemListPanel.transform.childCount; i++)
+        {
+            GameObject requestObject = TradeItemListPanel.transform.GetChild(i).gameObject;
+            Toggle[] toggles = requestObject.GetComponentsInChildren<Toggle>();
+            RequestUrgency urgency = (RequestUrgency)Enum.Parse(typeof(RequestUrgency), toggles.Where(x => x.isOn).First().name);
+            trade.Trader.Prototype.Requests.Add(new TradeItemRequest(requestObject.GetComponentInChildren<Text>().text, urgency));
+        }
+
+        FinalizeTrading();
     }   
+
+    public void FinalizeTrading ()
+    {
+        trade = null;
+        ClearInterface();
+        CloseDialog();
+    }
+
+    // TODO -- maybe add trader requests in the future?
 
     public void PrepareUIForRequests ()
     {
@@ -140,7 +162,7 @@ public class DialogBoxTrade : DialogBox
 
     private void AddRequestPanel(TradeItemRequest request)
     {
-        GameObject go = (GameObject)Instantiate(Resources.Load("UI/Components/TradeRequestPrefab"), TradeItemListPanel);
+        GameObject go = (GameObject)Instantiate(TradeRequestPrefab, TradeItemListPanel);
         go.transform.GetChild(0).GetComponent<Text>().text = request.ItemType;
     }
 

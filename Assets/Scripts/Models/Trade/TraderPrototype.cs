@@ -128,7 +128,7 @@ public class TraderPrototype : IPrototypable
 
                     while (requestReader.Read())
                     {
-                        if (requestReader.Name == "Request")
+                        if (requestReader.Name == "request")
                         {
                             PotentialRequests.Add(new TraderPotentialRequest
                             {
