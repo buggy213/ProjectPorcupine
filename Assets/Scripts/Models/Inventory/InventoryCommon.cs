@@ -10,7 +10,7 @@ using System.Xml;
 
 public class InventoryCommon : IPrototypable
 {
-    public string type;
+    private string type;
     public int maxStackSize;
     public float basePrice = 1f;
     public string category;

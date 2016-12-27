@@ -843,7 +843,7 @@ public class Furniture : ISelectable, IPrototypable, IContextActionProvider, IBu
         Dictionary<string, RequestedItem> itemsDict = new Dictionary<string, RequestedItem>();
         foreach (InventoryCommon inventoryProto in PrototypeManager.Inventory.Values)
         {
-            itemsDict[inventoryProto.type] = new RequestedItem(inventoryProto.type, 1, inventoryProto.maxStackSize);
+            itemsDict[inventoryProto.Type] = new RequestedItem(inventoryProto.Type, 1, inventoryProto.maxStackSize);
         }
 
         return itemsDict.Values.ToArray();

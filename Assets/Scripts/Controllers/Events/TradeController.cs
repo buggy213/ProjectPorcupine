@@ -20,11 +20,13 @@ public class TradeController
 {
     public List<TraderShipController> TradeShips;
 
+    public GameObject TradeItemPanel;
+
     private readonly ScheduledEvent traderVisitEvaluationEvent;
 
     /// <summary>
-    /// Instanciate a new TradeController
-    /// This will also schedull and event every 5 minutes for the trade controller to evaluate
+    /// Instantiate a new TradeController
+    /// This will also schedule and event every 5 minutes for the trade controller to evaluate
     /// if a trader will or not visit.
     /// </summary>
     public TradeController()
@@ -86,10 +88,8 @@ public class TradeController
         };
         dbm.dialogBoxTrade.TradeCompleted = () =>
         {
-            tradeShip.TradeCompleted = true;
-            TrasfertTradedItems(trade, tradeShip.LandingCoordinates);
-            TradeShips.Remove(tradeShip);
-        };
+            dbm.dialogBoxTrade.PrepareUIForRequests();
+        }; 
         dbm.dialogBoxTrade.ShowDialog();
     }
 

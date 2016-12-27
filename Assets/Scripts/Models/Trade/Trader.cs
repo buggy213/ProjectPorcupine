@@ -19,10 +19,12 @@ public class Trader
 
     public List<Inventory> Stock { get; set; }
 
+    public TraderPrototype Prototype { get; set; }
+
     /// <summary>
     /// Create a Trader from the current player
     /// This method will scan every stockpile build and add the found inventory to the stock
-    /// It will also assign a 0.8f sale margin multiplayer to the Trader.
+    /// It will also assign a 0.8f sale margin multiplier to the Trader.
     /// </summary>
     public static Trader FromPlayer(Currency currency)
     {

@@ -36,6 +36,11 @@ public class TraderPrototype : IPrototypable
 
     public SpritenameAnimation AnimationFlying { get; set; }
 
+    public List<TraderPotentialRequest> PotentialRequests { get; set; }
+
+    // Not part of the prototype per se, but doing requests on a trader by trader basis is quite difficult
+    public List<TradeItemRequest> Requests { get; set; }
+
     /// <summary>
     /// Value from 0 to 1, higher value represent higher availability of the trade resource.
     /// </summary>
@@ -117,6 +122,23 @@ public class TraderPrototype : IPrototypable
                     }
 
                     break;
+                case "potentialRequests":
+                    PotentialRequests = new List<TraderPotentialRequest>();
+                    XmlReader requestReader = reader.ReadSubtree();
+
+                    while (requestReader.Read())
+                    {
+                        if (requestReader.Name == "Request")
+                        {
+                            PotentialRequests.Add(new TraderPotentialRequest
+                            {
+                                Category = reader.GetAttribute("category"),
+                                ChanceToFulfill = float.Parse(reader.GetAttribute("chanceToFulfill")),
+                                Request = reader.GetAttribute("type")
+                            });
+                        }
+                    }
+                    break;
                 case "Animations":
                     XmlReader animationReader = reader.ReadSubtree();
                     ReadAnimationXml(animationReader);
@@ -138,7 +160,8 @@ public class TraderPrototype : IPrototypable
             Currency = curency,
             Name = PotentialNames[Random.Range(0, PotentialNames.Count - 1)],
             SaleMarginMultiplier = Random.Range(MinSaleMarginMultiplier, MaxSaleMarginMultiplier),
-            Stock = new List<Inventory>()
+            Stock = new List<Inventory>(),
+            Prototype = this
         };
 
         foreach (TraderPotentialInventory potentialStock in PotentialStock)
@@ -162,7 +185,7 @@ public class TraderPrototype : IPrototypable
                     foreach (InventoryCommon potentialObject in potentialObjects)
                     {
                         Inventory inventory = new Inventory(
-                            potentialObject.type,
+                            potentialObject.Type,
                             Random.Range(potentialStock.MinQuantity, potentialStock.MaxQuantity));
 
                         t.Stock.Add(inventory);

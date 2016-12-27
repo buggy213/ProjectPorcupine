@@ -92,12 +92,56 @@ public class DialogBoxTrade : DialogBox
         {
             trade = null;
             ClearInterface();
-            CloseDialog();
             if (TradeCompleted != null)
             {
                 TradeCompleted();
             }
         }
+    }   
+
+    public void PrepareUIForRequests ()
+    {
+        BuildRequestHeader();
+
+        foreach (TraderPotentialRequest potentialRequest in trade.Trader.Prototype.PotentialRequests)
+        {
+            if (!string.IsNullOrEmpty(potentialRequest.Request))
+            {
+                TradeItemRequest request = new TradeItemRequest(potentialRequest.Request, RequestUrgency.NONE);
+                AddRequestPanel(request);
+            }
+            else if (!string.IsNullOrEmpty(potentialRequest.Category))
+            {
+                List<InventoryCommon> common = GetInventoryCommonWithCategory(potentialRequest.Category);
+
+                foreach (InventoryCommon inventoryCommon in common)
+                {
+                    TradeItemRequest request = new TradeItemRequest(inventoryCommon.Type, RequestUrgency.NONE);
+                    AddRequestPanel(request);
+                }
+            }
+        }
+    }
+
+    private List<InventoryCommon> GetInventoryCommonWithCategory(string category)
+    {
+        return PrototypeManager.Inventory.Values.Where(i => i.category == category).ToList();
+    }
+
+    private void BuildRequestHeader()
+    {
+        PlayerCurrencyBalanceText.text = "";
+        TraderCurrencyBalanceText.text = "";
+        TraderCurrencyBalanceText.alignment = TextAnchor.MiddleRight;
+        TradeCurrencyBalanceText.text = "None Low";
+        TraderNameText.alignment = TextAnchor.MiddleCenter;
+        TraderNameText.text = "Medium High Urgent";
+    }
+
+    private void AddRequestPanel(TradeItemRequest request)
+    {
+        GameObject go = (GameObject)Instantiate(Resources.Load("UI/Components/TradeRequestPrefab"), TradeItemListPanel);
+        go.transform.GetChild(0).GetComponent<Text>().text = request.ItemType;
     }
 
     private void ClearInterface()
